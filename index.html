@@ -1,27 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>
-      Patient Case File
-    </title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22&gt;🌻&lt;/text&gt;&lt;/svg&gt;" />
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js">
-    </script>
-    <style>
-      * {
-      box-sizing: border-box;
-    }
+<head>
+  <meta charset="UTF-8" />
+  <title>Patient Case File</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌻</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: &#34;Inter&#34;, system-ui, -apple-system, sans-serif;
+      font-family: "Inter", system-ui, sans-serif;
       background: radial-gradient(circle at top, #ffe6ec, #f3c6d3, #e6a8ba);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      overflow: hidden; 
+      overflow: hidden;
       color: #2a1a1f;
     }
     .heart {
@@ -29,53 +25,31 @@
       font-size: 20px;
       opacity: 0;
       pointer-events: none;
-      z-index: 1;
       animation: floatUp 10s linear forwards;
     }
     @keyframes floatUp {
-      0% {
-        transform: translateY(110vh) scale(0.8);
-        opacity: 0;
-      }
-      10% {
-        opacity: 0.4;
-      }
-      90% {
-        opacity: 0.4;
-      }
-      100% {
-        transform: translateY(-20vh) scale(1.5);
-        opacity: 0;
-      }
+      0% { transform: translateY(110vh); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-20vh); opacity: 0; }
     }
     .file {
       backdrop-filter: blur(18px);
-      background: rgba(255, 255, 255, 0.55);
+      background: rgba(255,255,255,0.55);
       border-radius: 22px;
       padding: 36px;
       width: 90%;
       max-width: 520px;
-      box-shadow:
-        0 30px 80px rgba(0,0,0,0.18),
-        inset 0 1px 0 rgba(255,255,255,0.6);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.18);
       position: relative;
       z-index: 10;
-      animation: riseIn 0.8s ease forwards;
       max-height: 90vh;
       overflow-y: auto;
     }
-    @keyframes riseIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    h1 {
-      margin: 0;
-      font-size: 1.8rem;
-      letter-spacing: -0.02em;
-    }
+    h1 { margin: 0; font-size: 1.8rem; }
     .tag {
       display: inline-block;
-      background: rgba(230, 90, 125, 0.15);
+      background: rgba(230,90,125,0.15);
       color: #b13055;
       padding: 6px 12px;
       border-radius: 999px;
@@ -113,212 +87,100 @@
       cursor: pointer;
       background: linear-gradient(135deg, #e14b7b, #f08ca2);
       color: white;
-      box-shadow: 0 12px 25px rgba(225, 75, 123, 0.35);
-      transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.2s;
+      box-shadow: 0 12px 25px rgba(225,75,123,0.35);
     }
     button.secondary {
       background: #f8f9fa;
       color: #7a4b58;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      border: 1px solid rgba(0,0,0,0.05);
-    }
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 16px 30px rgba(225, 75, 123, 0.45);
-    }
-    button:active {
-      transform: translateY(0);
     }
     .image-grid {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 10px;
-        margin-top: 15px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 15px;
     }
     .image-grid img {
-        width: 100%;
-        border-radius: 12px;
-        aspect-ratio: 1;
-        object-fit: cover;
-        border: 2px solid white;
+      width: 100%;
+      border-radius: 12px;
+      object-fit: cover;
     }
-    .file::-webkit-scrollbar {
-      width: 6px;
+  </style>
+</head>
+
+<body>
+
+<div class="file" id="screen">
+  <h1>Patient Case File</h1>
+  <div class="tag">Confidential</div>
+  <div class="divider"></div>
+
+  <div class="label">Patient</div>
+  <div class="content">Someone from UPUMS</div>
+
+  <div class="label">Attending Physician</div>
+  <div class="content">Dr Ishika 🩺</div>
+
+  <div class="btn-container">
+    <button onclick="next()">Open Case</button>
+  </div>
+</div>
+
+<script>
+  const emojis = ['❤️','💗','💖','💕','💓','💘','✨','🌸','💌','🧸','🌹'];
+  function createHeart() {
+    const heart = document.createElement('span');
+    heart.className = 'heart';
+    heart.innerText = emojis[Math.floor(Math.random()*emojis.length)];
+    heart.style.left = Math.random()*100 + '%';
+    document.body.appendChild(heart);
+    setTimeout(() => heart.remove(), 10000);
+  }
+  setInterval(createHeart, 1000);
+
+  const screens = [
+    `<h1>Chief Complaint</h1><div class="tag">Ongoing</div><div class="divider"></div>
+     <div class="content">Persistent warmth in the chest when thinking about Ishika.</div>
+     <div class="btn-container"><button onclick="next()">Review Symptoms</button></div>`,
+
+    `<h1>Symptoms</h1><div class="tag">Documented</div><div class="divider"></div>
+     <div class="content">• Smiling for no reason<br>• Calm when seeing you<br>• You are my favorite person</div>
+     <div class="btn-container"><button onclick="next()">Assessment</button></div>`,
+
+    `<h1>Assessment</h1><div class="tag">Stable</div><div class="divider"></div>
+     <div class="content">Chronic and irreversible happiness.</div>
+     <div class="btn-container"><button onclick="next()">Final Recommendation</button></div>`,
+
+    `<h1>Final Recommendation</h1><div class="tag">High Priority</div><div class="divider"></div>
+     <div class="content"><strong>Will you be my Valentine?</strong></div>
+     <div class="btn-container">
+       <button onclick="yes()">Accept 💌</button>
+       <button class="secondary" onclick="reject()">Reject ❌</button>
+     </div>`,
+
+    `<h1>Case Closed</h1><div class="tag">Approved</div><div class="divider"></div>
+     <div class="content">Thank you, Dr Ishika ❤️</div>`
+  ];
+
+  let index = 0;
+
+  function next() {
+    if (index < screens.length) {
+      document.getElementById("screen").innerHTML = screens[index];
+      index++;
     }
-    .file::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .file::-webkit-scrollbar-thumb {
-      background: rgba(177, 48, 85, 0.2);
-      border-radius: 10px;
-    }
-    </style>
-  </head>
-  <body>
-    <div class="file" id="screen">
-      <h1>
-        Patient Case File
-      </h1>
-      <div class="tag">
-        Confidential
-      </div>
-      <div class="divider">
-      </div>
-      <div class="label">
-        Patient
-      </div>
-      <div class="content">
-        Someone from UPUMS
-      </div>
-      <div class="label">
-        Attending Physician
-      </div>
-      <div class="content">
-        Dr Ishika 🩺
-      </div>
-      <div class="btn-container">
-        <button onclick="next()">
-          Open Case
-        </button>
-      </div>
-    </div>
-    <script>
-      const emojis = [&#39;❤️&#39;, &#39;💗&#39;, &#39;💖&#39;, &#39;💕&#39;, &#39;💓&#39;, &#39;💘&#39;, &#39;✨&#39;, &#39;🌸&#39;, &#39;💌&#39;, &#39;🧸&#39;, &#39;🌹&#39;];
-    function createHeart() {
-      const heart = document.createElement(&#39;span&#39;);
-      heart.className = &#39;heart&#39;;
-      heart.innerText = emojis[Math.floor(Math.random() * emojis.length)];
-      const startLeft = Math.random() * 100;
-      const duration = 8 + Math.random() * 7;
-      const size = 16 + Math.random() * 12;
-      heart.style.left = startLeft + &#39;%&#39;;
-      heart.style.fontSize = size + &#39;px&#39;;
-      heart.style.animationDuration = duration + &#39;s&#39;;
-      document.body.appendChild(heart);
-      setTimeout(() =&gt; {
-        heart.remove();
-      }, duration * 1000);
-    }
-    setInterval(createHeart, 1000);
-    for(let i=0; i&lt;5; i++) setTimeout(createHeart, i * 200);
-    const screens = [
-        `
-        &lt;h1&gt;Chief Complaint&lt;/h1&gt;
-        &lt;div class=&#34;tag&#34;&gt;Ongoing&lt;/div&gt;
-        &lt;div class=&#34;divider&#34;&gt;&lt;/div&gt;
-        &lt;div class=&#34;content&#34;&gt;
-            Persistent warmth in the chest area when thinking about batchmate Ishika who
-            is incredibly intelligent, but narcissist also beautiful future doctor.
-        &lt;/div&gt;
-        &lt;div class=&#34;btn-container&#34;&gt;
-            &lt;button onclick=&#34;next()&#34;&gt;Review Symptoms&lt;/button&gt;
-        &lt;/div&gt;
-        `,
-        `
-        &lt;h1&gt;Symptoms&lt;/h1&gt;
-        &lt;div class=&#34;tag&#34;&gt;Well Documented&lt;/div&gt;
-        &lt;div class=&#34;divider&#34;&gt;&lt;/div&gt;
-        &lt;div class=&#34;content&#34;&gt;
-            • Smiling for no reason&lt;br&gt;
-            • Feeling calm just by seeing you once&lt;br&gt;
-            • Wanting to know everythingabout you&lt;br&gt;
-            • Complete certainty that you&#39;re my favorite person
-        &lt;/div&gt;
-        &lt;div class=&#34;btn-container&#34;&gt;
-            &lt;button onclick=&#34;next()&#34;&gt;Assessment&lt;/button&gt;
-        &lt;/div&gt;
-        `,
-        `
-        &lt;h1&gt;Assessment&lt;/h1&gt;
-        &lt;div class=&#34;tag&#34;&gt;Stable&lt;/div&gt;
-        &lt;div class=&#34;divider&#34;&gt;&lt;/div&gt;
-        &lt;div class=&#34;content&#34;&gt;
-            Condition appears chronic and irreversible.&lt;br&gt;&lt;br&gt;
-            Patient reports feeling safe, supported, 
-            and genuinely happy in your presence.
-        &lt;/div&gt;
-        &lt;div class=&#34;btn-container&#34;&gt;
-            &lt;button onclick=&#34;next()&#34;&gt;Final Recommendation&lt;/button&gt;
-        &lt;/div&gt;
-        `,
-        `
-        &lt;h1&gt;Final Recommendation&lt;/h1&gt;
-        &lt;div class=&#34;tag&#34;&gt;High Priority&lt;/div&gt;
-        &lt;div class=&#34;divider&#34;&gt;&lt;/div&gt;
-        &lt;div class=&#34;content&#34;&gt;
-            Proceed with Valentine&#39;s Day together.&lt;br&gt;
-            Laugh a lot.&lt;br&gt;
-            Eat something good with patient.&lt;br&gt;&lt;br&gt;
-            &lt;strong&gt;Will you be Patient&#39;s Valentine?&lt;/strong&gt;
-        &lt;/div&gt;
-        &lt;div class=&#34;btn-container&#34;&gt;
-            &lt;button onclick=&#34;yes()&#34;&gt;Accept 💌&lt;/button&gt;
-            &lt;button onclick=&#34;reject()&#34; class=&#34;secondary&#34;&gt;Reject ❌&lt;/button&gt;
-        &lt;/div&gt;
-        `,
-        `
-        &lt;h1&gt;Case Closed&lt;/h1&gt;
-        &lt;div class=&#34;tag&#34;&gt;Approved&lt;/div&gt;
-        &lt;div class=&#34;divider&#34;&gt;&lt;/div&gt;
-        &lt;div class=&#34;content&#34;&gt;
-            Recommendation accepted.&lt;br&gt;&lt;br&gt;
-            Prognosis: Extremely good.&lt;br&gt;
-            Thank you, Dr Ishika Gupta ❤️
-        &lt;/div&gt;
-        &lt;div class=&#34;btn-container&#34;&gt;
-            &lt;button onclick=&#34;next()&#34;&gt;View Treatment Plan&lt;/button&gt;
-        &lt;/div&gt;
-        `,
-        `
-        &lt;h1&gt;Treatment Plan&lt;/h1&gt;
-        &lt;div class=&#34;tag&#34;&gt;Valentine&#39;s Day&lt;/div&gt;
-        &lt;div class=&#34;divider&#34;&gt;&lt;/div&gt;
-        &lt;div class=&#34;content&#34;&gt;
-            &lt;strong&gt;Date:&lt;/strong&gt; February 14&lt;br&gt;
-            &lt;strong&gt;Time:&lt;/strong&gt; To be determined&lt;br&gt;
-            &lt;strong&gt;Location:&lt;/strong&gt; Our Fav Place&lt;br&gt;&lt;br&gt;
-            Side effects may include: Intense eye contact, endless smiling, 
-            uncontrollable laughter, food cravings, and feeling incredibly lucky.&lt;br&gt;&lt;br&gt; 
-            I can&#39;t wait to see you there! 😊
-        &lt;/div&gt;
-        `
-    ];
-    let index = 0;
-    function next() {
-        index++;
-        document.getElementById(&#34;screen&#34;).innerHTML = screens[index - 1];
-    }
-    function yes() {
-        confetti({
-            particleCount: 150,
-            spread: 70,
-            origin: { y: 0.6 },
-            colors: [&#39;#e14b7b&#39;, &#39;#f08ca2&#39;, &#39;#ffffff&#39;, &#39;#ffccd5&#39;]
-        });
-        index = 5; 
-        document.getElementById(&#34;screen&#34;).innerHTML = screens[4];
-    }
-    function reject() {
-        const rejectContent = `
-            &lt;h1&gt;Error 404: Option Not Found&lt;/h1&gt;
-            &lt;div class=&#34;tag&#34; style=&#34;background: #fee2e2; color: #991b1b;&#34;&gt;Action Forbidden&lt;/div&gt;
-            &lt;div class=&#34;divider&#34;&gt;&lt;/div&gt;
-            &lt;div class=&#34;content&#34;&gt;
-                Wait! Your medical license doesn&#39;t cover rejection of this specific patient. &lt;br&gt;&lt;br&gt;
-                Look how sad he&#39;ll be:
-                &lt;div class=&#34;image-grid&#34;&gt;
-                    &lt;img src=&#34;https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHpueGswamN2ZGNrNmFvbm9ycDJ6Z2FvMGFjOWRreHdtazR5ZWlqeiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/9Y5BbDSkSTiY8/giphy.gif&#34;&gt;
-                    &lt;img src=&#34;https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3ODZuZzIydmNzaXdmMmlyODdhaHdsbTZyaTVtbWdhMGdpMzN5cXp1NSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/BumgtJKvWFffVt2FSV/giphy.gif&#34;&gt;
-                &lt;/div&gt;
-                &lt;br&gt;
-                Please reconsider the correct medical procedure.
-            &lt;/div&gt;
-            &lt;div class=&#34;btn-container&#34;&gt;
-                &lt;button onclick=&#34;yes()&#34;&gt;Accept 💌&lt;/button&gt;
-            &lt;/div&gt;
-        `;
-        document.getElementById(&#34;screen&#34;).innerHTML = rejectContent;
-    }
-    </script>
-  </body>
+  }
+
+  function yes() {
+    confetti({ particleCount: 150, spread: 70 });
+    document.getElementById("screen").innerHTML = screens[4];
+  }
+
+  function reject() {
+    document.getElementById("screen").innerHTML =
+      `<h1>Error 404</h1><div class="content">Rejection not permitted.</div>
+       <div class="btn-container"><button onclick="yes()">Accept 💌</button></div>`;
+  }
+</script>
+
+</body>
 </html>
